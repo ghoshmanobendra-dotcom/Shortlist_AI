@@ -17,6 +17,7 @@ const NotFound = lazy(() => import("./pages/NotFound"));
 const InnerHome = lazy(() => import("./pages/InnerHome"));
 const PrivacyPolicy = lazy(() => import("./pages/PrivacyPolicy"));
 const Terms = lazy(() => import("./pages/Terms"));
+const TermsAcceptance = lazy(() => import("./pages/TermsAcceptance"));
 
 const queryClient = new QueryClient();
 
@@ -25,12 +26,31 @@ const AuthListener = () => {
   const location = useLocation();
 
   useEffect(() => {
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
-      // If we just signed in (or initialized with a session) and are on the auth page or root with a hash,
-      // redirect to dashboard.
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
       if (session) {
-        if (location.pathname === '/auth' || (location.pathname === '/' && location.hash.includes('access_token'))) {
-          navigate('/dashboard');
+        if (event === 'SIGNED_OUT') return;
+
+        // Check terms acceptance
+        const { data: profile } = await supabase
+          .from('profiles')
+          .select('terms_accepted')
+          .eq('id', session.user.id)
+          .single();
+
+        if (profile && !profile.terms_accepted) {
+          if (location.pathname !== '/accept-terms') {
+            navigate('/accept-terms');
+          }
+        } else {
+          // If explicitly on accept-terms but already accepted, or just logged in
+          if (location.pathname === '/accept-terms' || location.pathname === '/auth' || (location.pathname === '/' && location.hash.includes('access_token'))) {
+            navigate('/dashboard');
+          }
+        }
+      } else {
+        // No session
+        if (location.pathname.startsWith('/dashboard') || location.pathname === '/accept-terms') {
+          navigate('/auth');
         }
       }
     });
@@ -53,6 +73,7 @@ const App = () => (
               <Route path="/" element={<Index />} />
               <Route path="/privacy" element={<PrivacyPolicy />} />
               <Route path="/terms" element={<Terms />} />
+              <Route path="/accept-terms" element={<TermsAcceptance />} />
               <Route path="/auth" element={<Auth />} />
               <Route path="/dashboard" element={<Dashboard />} />
               <Route path="/dashboard/home" element={<InnerHome />} />
