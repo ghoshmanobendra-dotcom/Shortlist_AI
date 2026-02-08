@@ -1,9 +1,10 @@
-import { Suspense, lazy } from "react";
+import { Suspense, lazy, useEffect } from "react";
 import { Toaster } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, useNavigate, useLocation } from "react-router-dom";
 import { ThemeProvider } from "next-themes";
+import { supabase } from "@/lib/supabase";
 import Index from "./pages/Index";
 
 const Auth = lazy(() => import("./pages/Auth"));
@@ -19,12 +20,34 @@ const Terms = lazy(() => import("./pages/Terms"));
 
 const queryClient = new QueryClient();
 
+const AuthListener = () => {
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  useEffect(() => {
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
+      // If we just signed in (or initialized with a session) and are on the auth page or root with a hash,
+      // redirect to dashboard.
+      if (session) {
+        if (location.pathname === '/auth' || (location.pathname === '/' && location.hash.includes('access_token'))) {
+          navigate('/dashboard');
+        }
+      }
+    });
+
+    return () => subscription.unsubscribe();
+  }, [navigate, location]);
+
+  return null;
+};
+
 const App = () => (
   <QueryClientProvider client={queryClient}>
     <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
       <TooltipProvider>
         <Toaster />
         <BrowserRouter>
+          <AuthListener />
           <Suspense fallback={<div className="flex items-center justify-center min-h-screen">Loading...</div>}>
             <Routes>
               <Route path="/" element={<Index />} />
