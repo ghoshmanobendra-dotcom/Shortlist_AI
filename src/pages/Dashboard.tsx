@@ -1,7 +1,7 @@
 import { DashboardLayout } from "@/components/DashboardLayout";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Plus, Users, Clock, CheckCircle } from "lucide-react";
+import { Plus, Users, Clock, CheckCircle, ArrowRight } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { supabase } from "@/lib/supabase";
@@ -66,14 +66,38 @@ const Dashboard = () => {
                     return { ...job, candidateCount: count || 0 };
                 }) || []);
 
-                const calculatedStats = jobsWithCounts.reduce((acc, job) => ({
-                    totalCandidates: acc.totalCandidates + job.candidateCount,
-                    activeJobs: acc.activeJobs + (job.status === 'processing' ? 1 : 0),
-                    completedJobs: acc.completedJobs + (job.status === 'completed' ? 1 : 0)
-                }), { totalCandidates: 0, activeJobs: 0, completedJobs: 0 });
+                if (jobsWithCounts.length === 0) {
+                    setStats({
+                        totalCandidates: 128,
+                        activeJobs: 3,
+                        completedJobs: 12
+                    });
+                    setRecentJobs([
+                        {
+                            id: 'demo',
+                            title: 'Senior Frontend Engineer (Demo)',
+                            status: 'completed',
+                            created_at: new Date().toISOString(),
+                            candidateCount: 45
+                        },
+                        {
+                            id: 'demo-2',
+                            title: 'Product Designer (Demo)',
+                            status: 'processing',
+                            created_at: new Date(Date.now() - 86400000).toISOString(),
+                            candidateCount: 12
+                        }
+                    ]);
+                } else {
+                    const calculatedStats = jobsWithCounts.reduce((acc, job) => ({
+                        totalCandidates: acc.totalCandidates + job.candidateCount,
+                        activeJobs: acc.activeJobs + (job.status === 'processing' ? 1 : 0),
+                        completedJobs: acc.completedJobs + (job.status === 'completed' ? 1 : 0)
+                    }), { totalCandidates: 0, activeJobs: 0, completedJobs: 0 });
 
-                setStats(calculatedStats);
-                setRecentJobs(jobsWithCounts.slice(0, 5)); // Top 5
+                    setStats(calculatedStats);
+                    setRecentJobs(jobsWithCounts.slice(0, 5)); // Top 5
+                }
             } catch (error) {
                 console.error("Error loading dashboard:", error);
             } finally {
@@ -84,9 +108,26 @@ const Dashboard = () => {
         fetchDashboardData();
     }, []);
 
+    const isDemo = recentJobs.some(j => j.id === 'demo');
+
     return (
         <DashboardLayout>
             <div className="space-y-8 animate-fade-in">
+                {isDemo && (
+                    <div className="bg-gradient-to-r from-primary/20 to-primary/5 border border-primary/20 rounded-xl p-6 flex flex-col md:flex-row items-center justify-between gap-4">
+                        <div>
+                            <h2 className="text-xl font-bold text-foreground flex items-center gap-2">
+                                👋 Welcome to ShortlistAI!
+                            </h2>
+                            <p className="text-muted-foreground mt-1">
+                                We've loaded some sample data so you can see how it works. Click on a demo screening to explore the results dashboard.
+                            </p>
+                        </div>
+                        <Button asChild>
+                            <Link to="/dashboard/new">Create Your First Screening <ArrowRight className="ml-2 h-4 w-4" /></Link>
+                        </Button>
+                    </div>
+                )}
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                     <div>
                         <h1 className="text-3xl font-bold tracking-tight text-foreground">Dashboard</h1>
@@ -109,7 +150,7 @@ const Dashboard = () => {
                         <CardContent>
                             <div className="text-2xl font-bold">{loading ? "..." : stats.totalCandidates}</div>
                             <p className="text-xs text-muted-foreground flex items-center mt-1">
-                                Across all jobs
+                                {isDemo ? "Across sample jobs" : "Across all jobs"}
                             </p>
                         </CardContent>
                     </Card>
@@ -165,8 +206,8 @@ const Dashboard = () => {
                                             </div>
                                             <div className="flex items-center gap-4">
                                                 <span className={`px-3 py-1 rounded-full text-xs font-medium capitalize ${job.status === 'completed'
-                                                        ? 'bg-emerald-500/10 text-emerald-500'
-                                                        : 'bg-amber-500/10 text-amber-500'
+                                                    ? 'bg-emerald-500/10 text-emerald-500'
+                                                    : 'bg-amber-500/10 text-amber-500'
                                                     }`}>
                                                     {job.status}
                                                 </span>

@@ -23,7 +23,7 @@ const steps = [
 
 const HowItWorksSection = () => {
   return (
-    <section id="how-it-works" className="py-24 bg-card">
+    <section id="how-it-works" className="py-24 bg-muted/5">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="text-center mb-16">
@@ -48,12 +48,12 @@ const HowItWorksSection = () => {
                 <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center mb-6 group-hover:bg-primary/20 transition-colors">
                   <step.icon className="w-6 h-6 text-primary" />
                 </div>
-                
+
                 {/* Step number */}
                 <span className="absolute top-8 right-8 text-5xl font-bold text-muted/50">
                   {step.number}
                 </span>
-                
+
                 {/* Content */}
                 <h3 className="text-xl font-semibold text-foreground mb-3">
                   {step.title}

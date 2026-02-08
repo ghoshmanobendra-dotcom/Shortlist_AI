@@ -23,15 +23,15 @@ const ContactSection = () => {
     ];
 
     return (
-        <section id="contact" className="py-24 bg-secondary/30 relative overflow-hidden">
+        <section id="contact" className="py-24 bg-muted/5 relative overflow-hidden">
             <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
                 <div className="text-center max-w-3xl mx-auto mb-16">
-                    <h2 className="text-3xl sm:text-4xl font-bold text-foreground mb-4">
-                        Meet the Team
+                    <h2 className="text-3xl sm:text-4xl font-bold text-foreground mb-6">
+                        Meet the Builders
                     </h2>
-                    <p className="text-lg text-muted-foreground">
-                        We're a passionate team dedicated to transforming the recruitment process.
-                        Have questions? Reach out to us directly.
+                    <p className="text-lg text-muted-foreground mb-8">
+                        Built by engineers who were tired of spending weekends screening hundreds of resumes manually.
+                        We built ShortlistAI to give every candidate a fair shot while giving recruiters their time back.
                     </p>
                 </div>
 
@@ -39,16 +39,19 @@ const ContactSection = () => {
                     {team.map((member, index) => (
                         <div
                             key={index}
-                            className="bg-background rounded-2xl p-8 shadow-lg border border-border/50 hover:border-primary/50 transition-all duration-300 hover:shadow-xl hover:-translate-y-1 group"
+                            className="bg-card rounded-2xl p-8 shadow-lg border border-border/50 hover:border-primary/50 transition-all duration-300 hover:shadow-2xl hover:-translate-y-2 group"
                         >
                             <div className="flex flex-col items-center text-center">
-                                <div className="w-24 h-24 rounded-full bg-primary/10 flex items-center justify-center text-2xl font-bold text-primary mb-6 group-hover:scale-110 transition-transform duration-300 relative overflow-hidden">
+                                <div className="w-24 h-24 rounded-full bg-gradient-to-br from-primary/20 to-primary/5 flex items-center justify-center text-2xl font-bold text-primary mb-6 group-hover:scale-110 transition-transform duration-300 relative overflow-hidden ring-4 ring-background shadow-xl">
                                     <span className="z-10">{member.avatar}</span>
-                                    <div className="absolute inset-0 bg-primary/20 scale-0 group-hover:scale-100 transition-transform duration-300 rounded-full" />
                                 </div>
 
-                                <h3 className="text-2xl font-bold text-foreground mb-2">{member.name}</h3>
-                                <p className="text-primary font-medium mb-6">{member.role}</p>
+                                <h3 className="text-2xl font-bold text-foreground mb-1">{member.name}</h3>
+                                <p className="text-primary font-medium mb-4">{member.role}</p>
+
+                                <p className="text-muted-foreground mb-6 text-sm italic">
+                                    "{member.name === "MANOBENDRA GHOSH" ? "Obsessed with scalable architecture and AI agents." : "Passion for intuitive UX and data-driven insights."}"
+                                </p>
 
                                 <div className="flex items-center gap-4">
                                     <a
@@ -56,25 +59,25 @@ const ContactSection = () => {
                                         target="_blank"
                                         rel="noopener noreferrer"
                                         aria-label="GitHub"
-                                        className="inline-flex items-center justify-center rounded-full w-12 h-12 text-foreground/80 hover:text-primary hover:bg-primary/10 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+                                        className="inline-flex items-center justify-center rounded-full w-10 h-10 text-foreground/70 hover:text-white hover:bg-[#333] transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
                                     >
-                                        <Github className="w-6 h-6" />
+                                        <Github className="w-5 h-5" />
                                     </a>
                                     <a
                                         href={member.linkedin}
                                         target="_blank"
                                         rel="noopener noreferrer"
                                         aria-label="LinkedIn"
-                                        className="inline-flex items-center justify-center rounded-full w-12 h-12 text-foreground/80 hover:text-primary hover:bg-primary/10 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+                                        className="inline-flex items-center justify-center rounded-full w-10 h-10 text-foreground/70 hover:text-white hover:bg-[#0077b5] transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
                                     >
-                                        <Linkedin className="w-6 h-6" />
+                                        <Linkedin className="w-5 h-5" />
                                     </a>
                                     <a
                                         href={member.email}
                                         aria-label="Email"
-                                        className="inline-flex items-center justify-center rounded-full w-12 h-12 text-foreground/80 hover:text-primary hover:bg-primary/10 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+                                        className="inline-flex items-center justify-center rounded-full w-10 h-10 text-foreground/70 hover:text-white hover:bg-red-500 transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
                                     >
-                                        <Mail className="w-6 h-6" />
+                                        <Mail className="w-5 h-5" />
                                     </a>
                                 </div>
                             </div>

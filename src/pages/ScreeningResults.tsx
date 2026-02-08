@@ -58,6 +58,57 @@ const ScreeningResults = () => {
     useEffect(() => {
         const fetchResults = async () => {
             if (!id) return;
+
+            // DEMO MODE
+            if (id.startsWith('demo')) {
+                setJob({
+                    id: id,
+                    title: id === 'demo' ? 'Senior Frontend Engineer (Demo)' : 'Product Designer (Demo)',
+                    status: 'completed',
+                    description: 'This is a demo job description to showcase the platform capabilities.'
+                });
+
+                const demoCandidates = [
+                    {
+                        id: 'd1',
+                        name: "Alex Rivera",
+                        email: "alex.rivera@example.com",
+                        score: 94,
+                        status: "hire",
+                        summary: "Exceptional match. Alex has 7+ years of React experience and has led similar architectural migrations. His GitHub shows high-quality open source contributions relevant to our tech stack.",
+                        strengths: ["7+ years React experience", "System Design Leadership", "Strong Open Source Portfolio"],
+                        concerns: ["Higher salary expectation likely"],
+                        experience: "7 years"
+                    },
+                    {
+                        id: 'd2',
+                        name: "Sarah Chen",
+                        email: "sarah.chen@example.com",
+                        score: 88,
+                        status: "maybe",
+                        summary: "Strong candidate with solid technical skills. Lacks some specific experience in our niche but shows great learning potential and cultural fit.",
+                        strengths: ["Full-stack capabilities", "Strong communication", " rapid learner"],
+                        concerns: ["Less experience with Next.js specifically"],
+                        experience: "4 years"
+                    },
+                    {
+                        id: 'd3',
+                        name: "Mike Johnson",
+                        email: "mike.j@example.com",
+                        score: 72,
+                        status: "reject",
+                        summary: "Good developer but lacks the seniority required for this specific role. Better suited for a mid-level position.",
+                        strengths: ["Good consistent work history", "Python expertise"],
+                        concerns: ["Lacks leadership experience", "Not enough frontend depth"],
+                        experience: "3 years"
+                    }
+                ];
+                setCandidates(demoCandidates);
+                setSelectedCandidate(demoCandidates[0]);
+                setLoading(false);
+                return;
+            }
+
             try {
                 // Fetch Job
                 const { data: jobData, error: jobError } = await supabase

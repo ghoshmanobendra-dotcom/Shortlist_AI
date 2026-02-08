@@ -26,10 +26,10 @@ const CTASection = () => {
               <Link to="/auth">
                 <Button
                   size="lg"
-                  className="bg-primary text-primary-foreground hover:bg-primary/90"
+                  className="bg-gradient-to-r from-blue-500 to-blue-600 text-white shadow-[0_0_20px_rgba(59,130,246,0.6)] hover:shadow-[0_0_35px_rgba(59,130,246,0.9)] hover:scale-105 transition-all duration-300 border-none"
                 >
                   Get Started Free
-                  <ArrowRight className="w-5 h-5" />
+                  <ArrowRight className="w-5 h-5 ml-2" />
                 </Button>
               </Link>
 
